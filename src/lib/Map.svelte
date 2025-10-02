@@ -106,6 +106,7 @@
 
   // React to activities changes
   $effect(() => {
+    console.log('Effect triggered, L:', !!L, 'map:', !!map, 'activities:', activities.length);
     if (L && map && activities) {
       updateMarkers();
     }
