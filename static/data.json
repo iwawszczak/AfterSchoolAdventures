@@ -1,0 +1,134 @@
+[
+  {
+    "id": 1,
+    "nazwa": "Taniec nowoczesny",
+    "typ": "taniec",
+    "wiek": [6, 7, 8, 9],
+    "lokalizacja": {
+      "lat": 52.2297,
+      "lng": 21.0122,
+      "adres": "Warszawa, ul. Długa 12"
+    }
+  },
+  {
+    "id": 2,
+    "nazwa": "Piłka nożna dla maluchów",
+    "typ": "pilka_nozna",
+    "wiek": [4, 5, 6],
+    "lokalizacja": {
+      "lat": 52.2397,
+      "lng": 21.0222,
+      "adres": "Warszawa, ul. Sportowa 5"
+    }
+  },
+  {
+    "id": 3,
+    "nazwa": "Gimnastyka artystyczna",
+    "typ": "gimnastyka",
+    "wiek": [5, 6, 7, 8, 9, 10],
+    "lokalizacja": {
+      "lat": 52.2197,
+      "lng": 21.0022,
+      "adres": "Warszawa, ul. Gimnastyczna 8"
+    }
+  },
+  {
+    "id": 4,
+    "nazwa": "Język angielski dla dzieci",
+    "typ": "jezyk_angielski",
+    "wiek": [4, 5, 6, 7, 8],
+    "lokalizacja": {
+      "lat": 52.2497,
+      "lng": 21.0322,
+      "adres": "Warszawa, ul. Językowa 15"
+    }
+  },
+  {
+    "id": 5,
+    "nazwa": "Warsztaty plastyczne",
+    "typ": "plastyka",
+    "wiek": [3, 4, 5, 6, 7, 8],
+    "lokalizacja": {
+      "lat": 52.2097,
+      "lng": 20.9922,
+      "adres": "Warszawa, ul. Artystyczna 3"
+    }
+  },
+  {
+    "id": 6,
+    "nazwa": "Lekcje gry na pianinie",
+    "typ": "muzyka",
+    "wiek": [5, 6, 7, 8, 9, 10, 11, 12],
+    "lokalizacja": {
+      "lat": 52.2597,
+      "lng": 21.0422,
+      "adres": "Warszawa, ul. Muzyczna 22"
+    }
+  },
+  {
+    "id": 7,
+    "nazwa": "Szachy dla początkujących",
+    "typ": "szachy",
+    "wiek": [6, 7, 8, 9, 10, 11, 12],
+    "lokalizacja": {
+      "lat": 52.1997,
+      "lng": 20.9822,
+      "adres": "Warszawa, ul. Szachowa 7"
+    }
+  },
+  {
+    "id": 8,
+    "nazwa": "Robotyka LEGO",
+    "typ": "robotyka",
+    "wiek": [7, 8, 9, 10, 11, 12],
+    "lokalizacja": {
+      "lat": 52.2697,
+      "lng": 21.0522,
+      "adres": "Warszawa, ul. Techniczna 11"
+    }
+  },
+  {
+    "id": 9,
+    "nazwa": "Język hiszpański",
+    "typ": "jezyk_hiszpanski",
+    "wiek": [5, 6, 7, 8, 9, 10],
+    "lokalizacja": {
+      "lat": 52.1897,
+      "lng": 20.9722,
+      "adres": "Warszawa, ul. Hiszpańska 9"
+    }
+  },
+  {
+    "id": 10,
+    "nazwa": "Balet klasyczny",
+    "typ": "taniec",
+    "wiek": [4, 5, 6, 7, 8, 9],
+    "lokalizacja": {
+      "lat": 52.2797,
+      "lng": 21.0622,
+      "adres": "Warszawa, ul. Baletowa 14"
+    }
+  },
+  {
+    "id": 11,
+    "nazwa": "Sztuki walki dla dzieci",
+    "typ": "gimnastyka",
+    "wiek": [6, 7, 8, 9, 10, 11, 12],
+    "lokalizacja": {
+      "lat": 52.1797,
+      "lng": 20.9622,
+      "adres": "Warszawa, ul. Walki 6"
+    }
+  },
+  {
+    "id": 12,
+    "nazwa": "Gitara dla dzieci",
+    "typ": "muzyka",
+    "wiek": [7, 8, 9, 10, 11, 12],
+    "lokalizacja": {
+      "lat": 52.2897,
+      "lng": 21.0722,
+      "adres": "Warszawa, ul. Gitarowa 18"
+    }
+  }
+]
