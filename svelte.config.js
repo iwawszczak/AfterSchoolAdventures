@@ -17,7 +17,10 @@ const config = {
 			fallback: null,
 			precompress: false,
 			strict: true
-		})
+		}),
+		paths: {
+		  base: '/AfterSchoolAdventures' // jeśli repozytorium na GitHub Pages
+		}
 	}
 };
 
