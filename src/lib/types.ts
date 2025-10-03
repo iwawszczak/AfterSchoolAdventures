@@ -3,11 +3,18 @@ export interface Activity {
   nazwa: string;
   typ: string;
   wiek: number[];
+  strona_internetowa?: string;
+}
+
+export interface PlaceObject {
+  id: number;
+  nazwa: string;
   lokalizacja: {
     lat: number;
     lng: number;
     adres: string;
   };
+  zajecia: Activity[];
 }
 
 export interface ActivityType {

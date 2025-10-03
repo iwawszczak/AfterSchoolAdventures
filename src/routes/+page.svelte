@@ -3,71 +3,91 @@
   import Map from '$lib/Map.svelte';
   import Filters from '$lib/Filters.svelte';
   import ActivitiesList from '$lib/ActivitiesList.svelte';
-  import type { Activity } from '$lib/types.js';
+  import AddPlaceForm from '$lib/AddPlaceForm.svelte';
+  import type { PlaceObject } from '$lib/types.js';
   import { ACTIVITY_TYPES, AGE_GROUPS } from '$lib/types.js';
 
-  let activities = $state<Activity[]>([]);
-  let filteredActivities = $state<Activity[]>([]);
-  let selectedActivity = $state<Activity | null>(null);
+  let places = $state<PlaceObject[]>([]);
+  let filteredPlaces = $state<PlaceObject[]>([]);
+  let selectedPlace = $state<PlaceObject | null>(null);
   let selectedTypes = $state<string[]>([]);
   let selectedAgeGroups = $state<string[]>([]);
   let loading = $state(true);
+  let activeTab = $state<'cards' | 'add'>('cards');
 
   onMount(async () => {
     try {
       const response = await fetch('/data.json');
-      activities = await response.json();
-      filteredActivities = activities;
+      places = await response.json();
+      filteredPlaces = places;
       loading = false;
     } catch (error) {
-      console.error('Error loading activities:', error);
+      console.error('Error loading places:', error);
       loading = false;
     }
   });
 
-  function filterActivities() {
-    filteredActivities = activities.filter(activity => {
-      // Filter by type
-      if (selectedTypes.length > 0 && !selectedTypes.includes(activity.typ)) {
-        return false;
-      }
-
-      // Filter by age group
-      if (selectedAgeGroups.length > 0) {
-        const activityFitsAgeGroup = selectedAgeGroups.some(ageGroupLabel => {
-          const ageGroup = AGE_GROUPS.find(ag => ag.label === ageGroupLabel);
-          if (!ageGroup) return false;
-          
-          return activity.wiek.some(age => age >= ageGroup.min && age <= ageGroup.max);
-        });
-        
-        if (!activityFitsAgeGroup) {
+  function filterPlaces() {
+    filteredPlaces = places.filter(place => {
+      // Check if any activity in this place matches filters
+      return place.zajecia.some(zajecie => {
+        // Filter by type
+        if (selectedTypes.length > 0 && !selectedTypes.includes(zajecie.typ)) {
           return false;
         }
-      }
 
-      return true;
+        // Filter by age group
+        if (selectedAgeGroups.length > 0) {
+          const activityFitsAgeGroup = selectedAgeGroups.some(ageGroupLabel => {
+            const ageGroup = AGE_GROUPS.find(ag => ag.label === ageGroupLabel);
+            if (!ageGroup) return false;
+            
+            return zajecie.wiek.some(age => age >= ageGroup.min && age <= ageGroup.max);
+          });
+          
+          if (!activityFitsAgeGroup) {
+            return false;
+          }
+        }
+
+        return true;
+      });
     });
   }
 
   function handleTypeChange(types: string[]) {
     selectedTypes = types;
-    filterActivities();
+    filterPlaces();
   }
 
   function handleAgeGroupChange(ageGroups: string[]) {
     selectedAgeGroups = ageGroups;
-    filterActivities();
+    filterPlaces();
   }
 
-  function handleActivitySelect(activity: Activity) {
-    selectedActivity = activity;
+  function handlePlaceSelect(place: PlaceObject) {
+    selectedPlace = place;
+  }
+
+  function handleAddPlace(newPlace: PlaceObject) {
+    // Generate new ID
+    const newId = Math.max(...places.map(p => p.id)) + 1;
+    const placeWithId = { ...newPlace, id: newId };
+    
+    // Add to places array
+    places = [...places, placeWithId];
+    
+    // Switch back to cards tab
+    activeTab = 'cards';
+    selectedPlace = placeWithId;
+    
+    console.log('New place added:', placeWithId);
   }
 
   // React to filter changes
   $effect(() => {
-    if (activities.length > 0) {
-      filterActivities();
+    if (places.length > 0) {
+      filterPlaces();
     }
   });
 </script>
@@ -87,6 +107,34 @@
       <p class="text-gray-600 mt-1">
         Odkryj zajęcia dodatkowe w Twojej okolicy
       </p>
+      
+      <!-- Tab Navigation -->
+      <nav class="mt-6">
+        <div class="border-b border-gray-200">
+          <div class="flex space-x-8">
+            <button
+              class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
+              class:border-blue-500={activeTab === 'cards'}
+              class:text-blue-600={activeTab === 'cards'}
+              class:border-transparent={activeTab !== 'cards'}
+              class:text-gray-500={activeTab !== 'cards'}
+              onclick={() => activeTab = 'cards'}
+            >
+              Karty zajęć
+            </button>
+            <button
+              class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
+              class:border-blue-500={activeTab === 'add'}
+              class:text-blue-600={activeTab === 'add'}
+              class:border-transparent={activeTab !== 'add'}
+              class:text-gray-500={activeTab !== 'add'}
+              onclick={() => activeTab = 'add'}
+            >
+              Dodaj nowe miejsce
+            </button>
+          </div>
+        </div>
+      </nav>
     </div>
   </header>
 
@@ -100,11 +148,49 @@
         </div>
       </div>
     {:else}
-      <!-- Desktop Layout -->
-      <div class="hidden lg:grid lg:grid-cols-12 lg:gap-6 h-[calc(100vh-200px)]">
-        <!-- Filters Sidebar -->
-        <div class="lg:col-span-3">
-          <div class="sticky top-6">
+      {#if activeTab === 'cards'}
+        <!-- Cards Tab -->
+        <!-- Desktop Layout -->
+        <div class="hidden lg:grid lg:grid-cols-12 lg:gap-6 h-[calc(100vh-300px)]">
+          <!-- Filters Sidebar -->
+          <div class="lg:col-span-3">
+            <div class="sticky top-6">
+              <Filters
+                {selectedTypes}
+                {selectedAgeGroups}
+                onTypeChange={handleTypeChange}
+                onAgeGroupChange={handleAgeGroupChange}
+              />
+            </div>
+          </div>
+
+          <!-- Map -->
+          <div class="lg:col-span-6">
+            <div class="h-full rounded-lg overflow-hidden shadow-lg">
+              <Map
+                places={filteredPlaces}
+                {selectedPlace}
+                onPlaceSelect={handlePlaceSelect}
+              />
+            </div>
+          </div>
+
+          <!-- Activities List -->
+          <div class="lg:col-span-3">
+            <div class="h-full">
+              <ActivitiesList
+                places={filteredPlaces}
+                {selectedPlace}
+                onPlaceSelect={handlePlaceSelect}
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Layout -->
+        <div class="lg:hidden space-y-6">
+          <!-- Filters -->
+          <div>
             <Filters
               {selectedTypes}
               {selectedAgeGroups}
@@ -112,61 +198,29 @@
               onAgeGroupChange={handleAgeGroupChange}
             />
           </div>
-        </div>
 
-        <!-- Map -->
-        <div class="lg:col-span-6">
-          <div class="h-full rounded-lg overflow-hidden shadow-lg">
+          <!-- Map -->
+          <div class="h-96 rounded-lg overflow-hidden shadow-lg">
             <Map
-              activities={filteredActivities}
-              {selectedActivity}
-              onActivitySelect={handleActivitySelect}
+              places={filteredPlaces}
+              {selectedPlace}
+              onPlaceSelect={handlePlaceSelect}
             />
           </div>
-        </div>
 
-        <!-- Activities List -->
-        <div class="lg:col-span-3">
-          <div class="h-full">
+          <!-- Activities List -->
+          <div>
             <ActivitiesList
-              activities={filteredActivities}
-              {selectedActivity}
-              onActivitySelect={handleActivitySelect}
+              places={filteredPlaces}
+              {selectedPlace}
+              onPlaceSelect={handlePlaceSelect}
             />
           </div>
         </div>
-      </div>
-
-      <!-- Mobile Layout -->
-      <div class="lg:hidden space-y-6">
-        <!-- Filters -->
-        <div>
-          <Filters
-            {selectedTypes}
-            {selectedAgeGroups}
-            onTypeChange={handleTypeChange}
-            onAgeGroupChange={handleAgeGroupChange}
-          />
-        </div>
-
-        <!-- Map -->
-        <div class="h-96 rounded-lg overflow-hidden shadow-lg">
-          <Map
-            activities={filteredActivities}
-            {selectedActivity}
-            onActivitySelect={handleActivitySelect}
-          />
-        </div>
-
-        <!-- Activities List -->
-        <div>
-          <ActivitiesList
-            activities={filteredActivities}
-            {selectedActivity}
-            onActivitySelect={handleActivitySelect}
-          />
-        </div>
-      </div>
+      {:else}
+        <!-- Add Place Tab -->
+        <AddPlaceForm onAddPlace={handleAddPlace} />
+      {/if}
     {/if}
   </main>
 
