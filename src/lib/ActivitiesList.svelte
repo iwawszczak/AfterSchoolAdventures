@@ -24,7 +24,7 @@
   }
 
   function getUniqueActivityTypes(place: PlaceObject) {
-    const uniqueTypes = [...new Set(place.zajecia.map(zajecie => zajecie.typ))];
+    const uniqueTypes = [...new Set(place.activities.map(activity => activity.type))];
     return uniqueTypes.map(type => ACTIVITY_TYPES.find(t => t.key === type));
   }
 </script>
@@ -71,7 +71,7 @@
             <!-- Place info -->
             <div class="flex-1 min-w-0">
               <h3 class="font-medium text-gray-900 truncate">
-                {place.nazwa}
+                {place.name}
               </h3>
               
               <div class="mt-1 space-y-1">
@@ -80,23 +80,23 @@
                 </p>
                 
                 <p class="text-sm text-gray-500 truncate">
-                  <span class="font-medium">Adres:</span> {place.lokalizacja.adres}
+                  <span class="font-medium">Adres:</span> {place.location.address}
                 </p>
                 
                 <div class="mt-1">
                   <p class="text-sm text-gray-600">
-                    <span class="font-medium">Dostępne zajęcia ({place.zajecia.length}):</span>
+                    <span class="font-medium">Dostępne zajęcia ({place.activities.length}):</span>
                   </p>
                   <div class="ml-0 mt-1">
-                    {#each place.zajecia.slice(0, 3) as zajecie}
-                      {@const typeInfo = getActivityTypeInfo(zajecie)}
+                    {#each place.activities.slice(0, 3) as activity}
+                      {@const typeInfo = getActivityTypeInfo(activity)}
                       <div class="text-xs text-gray-500 mb-1 truncate">
-                        • {zajecie.nazwa} ({formatAgeRange(zajecie.wiek)})
+                        • {activity.name} ({formatAgeRange(activity.ageGroups)})
                       </div>
                     {/each}
-                    {#if place.zajecia.length > 3}
+                    {#if place.activities.length > 3}
                       <div class="text-xs text-gray-400">
-                        ... i {place.zajecia.length - 3} więcej
+                        ... i {place.activities.length - 3} więcej
                       </div>
                     {/if}
                   </div>

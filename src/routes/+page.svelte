@@ -14,6 +14,7 @@
   let selectedAgeGroups = $state<string[]>([]);
   let loading = $state(true);
   let activeTab = $state<'cards' | 'add'>('cards');
+  let mobileFiltersVisible = $state(false);
 
   onMount(async () => {
     try {
@@ -30,9 +31,9 @@
   function filterPlaces() {
     filteredPlaces = places.filter(place => {
       // Check if any activity in this place matches filters
-      return place.zajecia.some(zajecie => {
+      return place.activities.some(activity => {
         // Filter by type
-        if (selectedTypes.length > 0 && !selectedTypes.includes(zajecie.typ)) {
+        if (selectedTypes.length > 0 && !selectedTypes.includes(activity.type)) {
           return false;
         }
 
@@ -42,7 +43,7 @@
             const ageGroup = AGE_GROUPS.find(ag => ag.label === ageGroupLabel);
             if (!ageGroup) return false;
             
-            return zajecie.wiek.some(age => age >= ageGroup.min && age <= ageGroup.max);
+            return activity.ageGroups.some(age => age >= ageGroup.min && age <= ageGroup.max);
           });
           
           if (!activityFitsAgeGroup) {
@@ -67,6 +68,10 @@
 
   function handlePlaceSelect(place: PlaceObject) {
     selectedPlace = place;
+  }
+
+  function toggleMobileFilters() {
+    mobileFiltersVisible = !mobileFiltersVisible;
   }
 
   function handleAddPlace(newPlace: PlaceObject) {
@@ -120,9 +125,9 @@
               class:text-gray-500={activeTab !== 'cards'}
               onclick={() => activeTab = 'cards'}
             >
-              Karty zajęć
+              Zajęcia
             </button>
-            <button
+            <!-- <button
               class="py-2 px-1 border-b-2 font-medium text-sm transition-colors"
               class:border-blue-500={activeTab === 'add'}
               class:text-blue-600={activeTab === 'add'}
@@ -131,7 +136,7 @@
               onclick={() => activeTab = 'add'}
             >
               Dodaj nowe miejsce
-            </button>
+            </button> -->
           </div>
         </div>
       </nav>
@@ -189,14 +194,37 @@
 
         <!-- Mobile Layout -->
         <div class="lg:hidden space-y-6">
+          <!-- Mobile Filters Toggle -->
+          <div class="bg-white rounded-lg shadow-md p-4">
+            <div class="flex items-center justify-between">
+              <div class="flex-1">
+                <h2 class="text-lg font-semibold text-gray-800 mb-2">Filtry wyszukiwania</h2>
+                <p class="text-sm text-gray-600">
+                  {selectedTypes.length > 0 || selectedAgeGroups.length > 0 
+                    ? `Aktywne filtry: ${selectedTypes.length} typów, ${selectedAgeGroups.length} grup wiekowych`
+                    : 'Brak aktywnych filtrów'
+                  }
+                </p>
+              </div>
+              <button
+                onclick={toggleMobileFilters}
+                class="ml-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+              >
+                {mobileFiltersVisible ? 'Ukryj filtry' : 'Pokaż filtry'}
+              </button>
+            </div>
+          </div>
+
           <!-- Filters -->
-          <div>
-            <Filters
-              {selectedTypes}
-              {selectedAgeGroups}
-              onTypeChange={handleTypeChange}
-              onAgeGroupChange={handleAgeGroupChange}
-            />
+          <div class="transition-all duration-300 overflow-hidden" class:hidden={!mobileFiltersVisible}>
+            <div class="transform" class:-translate-y-full={!mobileFiltersVisible}>
+              <Filters
+                {selectedTypes}
+                {selectedAgeGroups}
+                onTypeChange={handleTypeChange}
+                onAgeGroupChange={handleAgeGroupChange}
+              />
+            </div>
           </div>
 
           <!-- Map -->

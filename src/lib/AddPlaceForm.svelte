@@ -8,20 +8,20 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
   let { onAddPlace }: { onAddPlace: (place: PlaceObject) => void } = $props();
 
   let formData = $state({
-    nazwa: '',
-    lokalizacja: {
+    name: '',
+    location: {
       lat: 52.2297,
       lng: 21.0122,
-      adres: ''
+      address: ''
     },
-    zajecia: [] as Activity[]
+    activities: [] as Activity[]
   });
 
-  let newSchoolData = $state({
-    nazwa: '',
-    typ: '',
-    wiek: [] as number[],
-    strona_internetowa: ''
+  let newActivityData = $state({
+    name: '',
+    type: '',
+    ageGroups: [] as number[],
+    website: ''
   });
 
   let mapContainer: HTMLDivElement;
@@ -64,22 +64,22 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
     // Handle marker drag to update location
     marker.on('dragend', () => {
       const position = marker.getLatLng();
-      formData.lokalizacja = {
+      formData.location = {
         lat: position.lat,
         lng: position.lng,
-        adres: formData.lokalizacja.adres
+        address: formData.location.address
       };
-      locationInput = formData.lokalizacja.adres;
+      locationInput = formData.location.address;
     });
 
     // Handle map click to update location
     map.on('click', (e: any) => {
       const { lat, lng } = e.latlng;
       marker.setLatLng([lat, lng]);
-      formData.lokalizacja = {
+      formData.location = {
         lat: lat,
         lng: lng,
-        adres: formData.lokalizacja.adres
+        address: formData.location.address
       };
     });
   });
@@ -111,7 +111,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
 
   function selectSuggestion(suggestion: string) {
     locationInput = suggestion;
-    formData.lokalizacja.adres = suggestion;
+    formData.location.address = suggestion;
     showSuggestions = false;
     suggestions = [];
 
@@ -126,55 +126,55 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
           const position = [parseFloat(lat), parseFloat(lon)];
           marker.setLatLng(position);
           map.setView(position, 15);
-          formData.lokalizacja = {
+          formData.location = {
             lat: position[0],
             lng: position[1],
-            adres: suggestion
+            address: suggestion
           };
         }
       })
       .catch(error => console.error('Error fetching coordinates:', error));
   }
 
-  function toggleNewActivityAge(age: number) {
-    if (newSchoolData.wiek.includes(age)) {
-      newSchoolData.wiek = newSchoolData.wiek.filter(a => a !== age).sort((a, b) => a - b);
+  function toggleNewActivityAgeGroups(age: number) {
+    if (newActivityData.ageGroups.includes(age)) {
+      newActivityData.ageGroups = newActivityData.ageGroups.filter(a => a !== age).sort((a, b) => a - b);
     } else {
-      newSchoolData.wiek = [...newSchoolData.wiek, age].sort((a, b) => a - b);
+      newActivityData.ageGroups = [...newActivityData.ageGroups, age].sort((a, b) => a - b);
     }
   }
 
   function addActivity() {
-    if (!newSchoolData.nazwa || !newSchoolData.typ || newSchoolData.wiek.length === 0) {
+    if (!newActivityData.name || !newActivityData.type || newActivityData.ageGroups.length === 0) {
       alert('Proszę wypełnić wszystkie wymagane pola zajęcia');
       return;
     }
 
     const newActivity: Activity = {
       id: Date.now(), // Generate unique ID
-      nazwa: newSchoolData.nazwa,
-      typ: newSchoolData.typ,
-      wiek: newSchoolData.wiek,
-      strona_internetowa: newSchoolData.strona_internetowa || undefined
+      name: newActivityData.name,
+      type: newActivityData.type,
+      ageGroups: newActivityData.ageGroups,
+      website: newActivityData.website || undefined
     };
 
-    formData.zajecia = [...formData.zajecia, newActivity];
+    formData.activities = [...formData.activities, newActivity];
     
     // Reset activity form
-    newSchoolData = {
-      nazwa: '',
-      typ: '',
-      wiek: [],
-      strona_internetowa: ''
+    newActivityData = {
+      name: '',
+      type: '',
+      ageGroups: [],
+      website: ''
     };
   }
 
   function removeActivity(index: number) {
-    formData.zajecia = formData.zajecia.filter((_, i) => i !== index);
+    formData.activities = formData.activities.filter((_, i) => i !== index);
   }
 
   function submitForm() {
-    if (!formData.nazwa || formData.zajecia.length === 0) {
+    if (!formData.name || formData.activities.length === 0) {
       alert('Proszę wypełnić nazwę obiektu i dodać przynajmniej jedno zajęcie');
       return;
     }
@@ -183,9 +183,9 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
     
     const newPlace: PlaceObject = {
       id: 0, // Will be set by parent component
-      nazwa: formData.nazwa,
-      lokalizacja: formData.lokalizacja,
-      zajecia: formData.zajecia
+      name: formData.name,
+      location: formData.location,
+      activities: formData.activities
     };
 
     onAddPlace(newPlace);
@@ -193,13 +193,13 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
     // Reset form
     setTimeout(() => {
       formData = {
-        nazwa: '',
-        lokalizacja: {
+        name: '',
+        location: {
           lat: 52.2297,
           lng: 21.0122,
-          adres: ''
+          address: ''
         },
-        zajecia: []
+        activities: []
       };
       locationInput = '';
       
@@ -214,7 +214,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
 
   // Auto-populate location input when address is set
   $effect(() => {
-    locationInput = formData.lokalizacja.adres;
+    locationInput = formData.location.address;
   });
 
   // Reactive JSON formatting
@@ -222,17 +222,17 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
   
   $effect(() => {
     const placeToSend = {
-      nazwa: formData.nazwa,
-      lokalizacja: {
-        lat: formData.lokalizacja.lat,
-        lng: formData.lokalizacja.lng,
-        adres: formData.lokalizacja.adres
+      name: formData.name,
+      location: {
+        lat: formData.location.lat,
+        lng: formData.location.lng,
+        address: formData.location.address
       },
-      zajecia: formData.zajecia.map(zajecie => ({
-        nazwa: zajecie.nazwa,
-        typ: zajecie.typ,
-        wiek: zajecie.wiek,
-        strona_internetowa: zajecie.strona_internetowa || undefined
+      activities: formData.activities.map(activity => ({
+        name: activity.name,
+        type: activity.type,
+        ageGroups: activity.ageGroups,
+        website: activity.website || undefined
       }))
     };
     
@@ -316,7 +316,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
               <input
                 type="text"
                 id="place-name"
-                bind:value={formData.nazwa}
+                bind:value={formData.name}
                 required
                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 placeholder="np. Centrum Kultury"
@@ -341,7 +341,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
                 <input
                   type="text"
                   id="activity-name"
-                  bind:value={newSchoolData.nazwa}
+                  bind:value={newActivityData.name}
                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="np. Balet klasyczny"
                 />
@@ -353,7 +353,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
                 </label>
                 <select
                   id="activity-type"
-                  bind:value={newSchoolData.typ}
+                  bind:value={newActivityData.type}
                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Wybierz typ</option>
@@ -369,17 +369,17 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
                     Grupa wiekowa *
                   </legend>
                 <div class="flex flex-wrap gap-2">
-                  {#each Array.from({length: 10}, (_, i) => i + 3) as age}
+                  {#each Array.from({length: 17}, (_, i) => i) as age}
                     <button
                       type="button"
                       class="px-3 py-1 text-sm rounded-full border transition-colors"
-                      class:bg-blue-500={newSchoolData.wiek.includes(age)}
-                      class:text-white={newSchoolData.wiek.includes(age)}
-                      class:border-blue-500={newSchoolData.wiek.includes(age)}
-                      class:bg-white={!newSchoolData.wiek.includes(age)}
-                      class:text-gray-700={!newSchoolData.wiek.includes(age)}
-                      class:border-gray-300={!newSchoolData.wiek.includes(age)}
-                      onclick={() => toggleNewActivityAge(age)}
+                      class:bg-blue-500={newActivityData.ageGroups.includes(age)}
+                      class:text-white={newActivityData.ageGroups.includes(age)}
+                      class:border-blue-500={newActivityData.ageGroups.includes(age)}
+                      class:bg-white={!newActivityData.ageGroups.includes(age)}
+                      class:text-gray-700={!newActivityData.ageGroups.includes(age)}
+                      class:border-gray-300={!newActivityData.ageGroups.includes(age)}
+                      onclick={() => toggleNewActivityAgeGroups(age)}
                     >
                       {age} lat
                     </button>
@@ -395,7 +395,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
                 <input
                   type="url"
                   id="activity-website"
-                  bind:value={newSchoolData.strona_internetowa}
+                  bind:value={newActivityData.website}
                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="https://example.com"
                 />
@@ -415,12 +415,12 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
           </div>
           
           <!-- List of Added Activities -->
-          {#if formData.zajecia.length > 0}
+          {#if formData.activities.length > 0}
             <div class="mt-4">
               <h4 class="font-medium text-gray-900 mb-3">Dodane zajęcia:</h4>
               <div class="space-y-2">
-                {#each formData.zajecia as zajecie, index}
-                  {@const typeInfo = ACTIVITY_TYPES.find(type => type.key === zajecie.typ)}
+                {#each formData.activities as activity, index}
+                  {@const typeInfo = ACTIVITY_TYPES.find(type => type.key === activity.type)}
                   <div class="bg-gray-100 p-3 rounded flex justify-between items-center">
                     <div class="flex items-center space-x-3">
                       <div
@@ -428,9 +428,9 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
                         style="background-color: {typeInfo?.color || '#3b82f6'}"
                       ></div>
                       <div>
-                        <div class="font-medium">{zajecie.nazwa}</div>
+                        <div class="font-medium">{activity.name}</div>
                         <div class="text-sm text-gray-600">
-                          {typeInfo?.label} • {zajecie.wiek.join(', ')} lat
+                          {typeInfo?.label} • {activity.ageGroups.join(', ')} lat
                         </div>
                       </div>
                     </div>
@@ -522,7 +522,7 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
       <div class="p-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-4">Podgląd JSON</h3>
         
-        {#if formData.nazwa || formData.zajecia.length > 0}
+        {#if formData.name || formData.activities.length > 0}
           <div class="bg-gray-50 rounded-lg p-4">
             <div class="flex justify-between items-center mb-3">
               <h4 class="text-sm font-medium text-gray-700">Struktura danych do wysłania:</h4>
@@ -542,16 +542,16 @@ import SimpleEmailForm from './SimpleEmailForm.svelte';
             <p><strong>Status danych:</strong></p>
             <ul class="list-disc list-inside mt-1 space-y-1">
               <li class="text-red-600">
-                Nazwa obiektu: {formData.nazwa || '❌ Brak nazwy'}
+                Nazwa obiektu: {formData.name || '❌ Brak nazwy'}
               </li>
               <li class="text-red-600">  
-                Liczba zajęć: {formData.zajecia.length} {formData.zajecia.length === 0 ? '❌ Musisz dodać przynajmniej jedno zajęcie' : '✅ OK'}
+                Liczba zajęć: {formData.activities.length} {formData.activities.length === 0 ? '❌ Musisz dodać przynajmniej jedno zajęcie' : '✅ OK'}
               </li>
               <li class="text-red-600">
-                Adres: {formData.lokalizacja.adres || '❌ Podaj adres'}
+                Adres: {formData.location.address || '❌ Podaj adres'}
               </li>
               <li class="text-orange-600">
-                Nowe zajęcie: {newSchoolData.nazwa || newSchoolData.typ ? '⚠️ Uzupełnij i dodaj do listy' : '✅ Brak niedokończonych danych'}
+                Nowe zajęcie: {newActivityData.name || newActivityData.type ? '⚠️ Uzupełnij i dodaj do listy' : '✅ Brak niedokończonych danych'}
               </li>
             </ul>
           </div>
