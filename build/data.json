@@ -1,0 +1,196 @@
+[
+  {
+    "id": 1,
+    "name": "Ampa Park (Bronowice)",
+    "location": {
+      "lat": 50.09209,
+      "lng": 19.89804,
+      "address": "ul. Stawowa 119, 31-346 Kraków"
+    },
+    "activities": [
+      {
+        "id": 101,
+        "name": "Zajęcia ruchowe / trampoliny / ogólnorozwojowe",
+        "type": "gymnastics",
+        "ageGroups": [3,4,5,6,7,8,9,10,11,12],
+        "website": "https://ampapark.pl/bronowice"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Fikołki (Galeria Bronowice)",
+    "location": {
+      "lat": 50.09209,
+      "lng": 19.89804,
+      "address": "ul. Stawowa 61, 31-346 Kraków"
+    },
+    "activities": [
+      {
+        "id": 201,
+        "name": "Zajęcia dla maluchów / kącik malucha",
+        "type": "arts",
+        "ageGroups": [0,1,2,3],
+        "website": "https://fikolki.pl/galeria-bronowice-krakow/"
+      },
+      {
+        "id": 202,
+        "name": "Sala taneczna / zajęcia ruchowe",
+        "type": "dance",
+        "ageGroups": [3,4,5,6],
+        "website": "https://fikolki.pl/galeria-bronowice-krakow/"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Mini Świat (Bronowice)",
+    "location": {
+      "lat": 50.088017,
+      "lng": 19.8814461,
+      "address": "ul. Władysława Żeleńskiego 3, 30-353 Kraków"
+    },
+    "activities": [
+      {
+        "id": 301,
+        "name": "Sala zabaw + warsztaty plastyczne",
+        "type": "arts",
+        "ageGroups": [2,3,4,5,6,7,8],
+        "website": "https://miniswiat.pl/bronowice/"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Gota B (Bronowicka)",
+    "location": {
+      "lat": 50.07949721322151,
+      "lng": 19.896437855612366,
+      "address": "ul. Bronowicka 73, 30-091 Kraków"
+    },
+    "activities": [
+      {
+        "id": 401,
+        "name": "Gimnastyka powietrzna (aerial silks, hamaki)",
+        "type": "gymnastics",
+        "ageGroups": [6,7,8,9,10,11,12],
+        "website": "https://www.gota-b.pl/"
+      },
+      {
+        "id": 402,
+        "name": "Capoeira / zajęcia walki-ruchu",
+        "type": "martial_arts",
+        "ageGroups": [6,7,8,9,10,11,12],
+        "website": "https://www.gota-b.pl/"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "PROLOG Szkoła Języków Obcych",
+    "location": {
+      "lat": 50.0875,
+      "lng": 19.8910,
+      "address": "ul. Bronowicka 37, 30-084 Kraków"
+    },
+    "activities": [
+      {
+        "id": 501,
+        "name": "Kurs angielskiego dla dzieci",
+        "type": "english",
+        "ageGroups": [6,7,8,9,10,11,12,13]
+      },
+      {
+        "id": 502,
+        "name": "Kurs niemieckiego / hiszpańskiego dla młodzieży",
+        "type": "spanish",
+        "ageGroups": [10,11,12,13,14,15]
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Helen Doron – oddział Bronowice",
+    "location": {
+      "lat": 50.0875,
+      "lng": 19.8910,
+      "address": "ul. Bronowicka 37, Kraków"
+    },
+    "activities": [
+      {
+        "id": 601,
+        "name": "Angielski dla dzieci (metoda Helen Doron)",
+        "type": "english",
+        "ageGroups": [2,3,4,5,6,7,8,9,10,11,12,13,14]
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "United Kids – Bronowice",
+    "location": {
+      "lat": 50.0900,
+      "lng": 19.8900,
+      "address": "Bronowice, Kraków"
+    },
+    "activities": [
+      {
+        "id": 701,
+        "name": "Angielski dla dzieci i młodzieży",
+        "type": "english",
+        "ageGroups": [2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Polonia Kraków – sekcja dziecięca (Bronowice)",
+    "location": {
+      "lat": 50.0980,
+      "lng": 19.8800,
+      "address": "XVII Liceum Ogólnokształcące, ul. Złoty Róg 30, Kraków"
+    },
+    "activities": [
+      {
+        "id": 801,
+        "name": "Trening piłkarski dla dzieci",
+        "type": "football",
+        "ageGroups": [2,3,4,5,6,7,8,9,10,11]
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Akademia Pływania KS Bronowianka",
+    "location": {
+      "lat": 50.0785,
+      "lng": 19.8700,
+      "address": "Klub Sportowy Bronowianka, ul. Zarzecze 124A, Kraków"
+    },
+    "activities": [
+      {
+        "id": 901,
+        "name": "Nauka pływania i doskonalenie technik pływackich",
+        "type": "swimming",
+        "ageGroups": [4,5,6,7,8,9,10,11,12,13,14,15]
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "CSiR KREATOR – zajęcia ogólnorozwojowe",
+    "location": {
+      "lat": 50.0870,
+      "lng": 19.8900,
+      "address": "KREATOR, Bronowice, Kraków"
+    },
+    "activities": [
+      {
+        "id": 1001,
+        "name": "Zajęcia ogólnorozwojowe dla dzieci",
+        "type": "gymnastics",
+        "ageGroups": [3,4,5,6,7,8,9]
+      }
+    ]
+  }
+]
